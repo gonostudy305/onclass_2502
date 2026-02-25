@@ -1,0 +1,94 @@
+<!-- Header -->
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+        <span class="navbar-brand mx-auto fs-4 fw-bold">CRUD App Example</span>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <!-- Left: Form -->
+        <div class="col-md-5">
+            <h4 class="fw-bold">Update Product Info</h4>
+            <form (ngSubmit)="onSubmit()">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Name:</label>
+                    <input type="text" class="form-control" placeholder="Enter product name" [(ngModel)]="name"
+                        name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Price (VNĐ):</label>
+                    <input type="number" class="form-control" [(ngModel)]="price" name="price" step="1000" min="0">
+                </div>
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                <button type="button" class="btn btn-secondary" (click)="onReset()">Reset</button>
+            </form>
+        </div>
+
+        <!-- Right: Product List -->
+        <div class="col-md-7">
+            <h4 class="fw-bold text-center">Product List</h4>
+
+            <!-- Filter & Sort -->
+            <div class="card mb-3">
+                <div class="card-body py-2">
+                    <div class="row g-2 align-items-end">
+                        <div class="col">
+                            <label class="form-label mb-0 small fw-bold">Min Price</label>
+                            <input type="number" class="form-control form-control-sm" [(ngModel)]="minPrice"
+                                name="minPrice" step="1000" min="0" placeholder="0" (ngModelChange)="applyFilterSort()">
+                        </div>
+                        <div class="col">
+                            <label class="form-label mb-0 small fw-bold">Max Price</label>
+                            <input type="number" class="form-control form-control-sm" [(ngModel)]="maxPrice"
+                                name="maxPrice" step="1000" min="0" placeholder="&#8734;"
+                                (ngModelChange)="applyFilterSort()">
+                        </div>
+                        <div class="col">
+                            <label class="form-label mb-0 small fw-bold">Sort by Price</label>
+                            <select class="form-select form-select-sm" [(ngModel)]="sortOrder" name="sortOrder"
+                                (ngModelChange)="applyFilterSort()">
+                                <option value="none">-- None --</option>
+                                <option value="asc">Low &#8594; High</option>
+                                <option value="desc">High &#8594; Low</option>
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-sm btn-outline-danger" (click)="onResetFilter()">Clear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let product of filteredProducts; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-secondary" (click)="onEdit(product)">
+                                &#9998; Edit
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-secondary" (click)="onDelete(product._id)">
+                                &#128465; Del
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="errMsg" class="alert alert-danger">{{ errMsg }}</div>
+        </div>
+    </div>
+</div>
